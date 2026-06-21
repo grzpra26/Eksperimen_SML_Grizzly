@@ -30,7 +30,7 @@ jobs:
     # Langkah 4: Jalankan skrip otomatisasi preprocessing kamu
     - name: Run Preprocessing Script
       run: |
-        python preprocessing/automate_Nama-siswa.py
+        python preprocessing/automate_Grizzly_Pradipta_Singhasana_Enshito.py
 
     # Langkah 5: Simpan dan push kembali dataset bersih hasil olahan robot ke dalam repo
     - name: Commit and Push Preprocessed Data
