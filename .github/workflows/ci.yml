@@ -1,0 +1,41 @@
+name: Continuous Integration (CI)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.12.7
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12.7'
+
+    - name: Install Linting Tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+
+    - name: Run Code Linting (Syntax Check)
+      run: |
+        # Menghentikan build jika ada syntax error atau undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Kriteria kosmetik (warning biasa) dibuat tidak menggagalkan build
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Verify MLflow Project Configuration
+      run: |
+        if [ -f "MLproject" ]; then
+          echo "Validasi Sukses: Berkas MLproject ditemukan!"
+        else
+          echo "Validasi Gagal: Berkas MLproject tidak ditemukan!"
+          exit 1
+        fi
