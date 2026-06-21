@@ -38,6 +38,6 @@ if __name__ == "__main__":
     clean_data = kriteria_preprocessing(raw_data)
     
     # Menyimpan hasil akhir ke folder kriteria 1
-    clean_data.to_csv("preprocessing/namadataset_preprocessing.csv", index=False)
+    clean_data.to_csv("preprocessing/diabetes_preprocessing.csv", index=False)
     
     print("Otomatisasi Selesai! File bersih berhasil disimpan.")
