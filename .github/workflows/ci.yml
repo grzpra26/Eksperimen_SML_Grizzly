@@ -26,15 +26,14 @@ jobs:
 
     - name: Run Code Linting (Syntax Check)
       run: |
-        # Menghentikan build jika ada syntax error atau undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # Kriteria kosmetik (warning biasa) dibuat tidak menggagalkan build
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+    # 🌟 PERBAIKAN DI SINI: Ditambahkan 'MLProject/' sebelum nama file
     - name: Verify MLflow Project Configuration
       run: |
-        if [ -f "MLproject" ]; then
-          echo "Validasi Sukses: Berkas MLproject ditemukan!"
+        if [ -f "MLProject/MLproject" ]; then
+          echo "Validasi Sukses: Berkas MLproject ditemukan di dalam folder MLProject!"
         else
           echo "Validasi Gagal: Berkas MLproject tidak ditemukan!"
           exit 1
