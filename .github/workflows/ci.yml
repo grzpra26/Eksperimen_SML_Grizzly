@@ -59,7 +59,7 @@ jobs:
 
     - name: Tag Docker Image
       run: |
-        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest ${ { secrets.DOCKERHUB_USERNAME } }/diabetes-model:latest
+        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest
 
     - name: Push Docker Image
       run: |
