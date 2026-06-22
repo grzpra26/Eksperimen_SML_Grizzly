@@ -25,5 +25,5 @@ SYSTEM_RAM_USAGE = Gauge(
 
 # Fungsi helper untuk memperbarui metrik hardware secara berkala
 def update_system_metrics():
-    SYSTEM_CPU_USAGE.set(psutil.cpu_percent(interval=None))
+    SYSTEM_CPU_USAGE.set(psutil.cpu_percent(interval=0.1))
     SYSTEM_RAM_USAGE.set(psutil.virtual_memory().percent)
