@@ -32,6 +32,12 @@ def root():
 
 @app.post("/predict")
 def predict_diabetes(patient: PatientData):
+    # 🌟 TRICK ADMIN IT: Paksa CPU kerja keras selama 0.2 detik per request biar Grafana Firing!
+    import time
+    start_stress = time.time()
+    while time.time() - start_stress < 0.2:
+        _ = 9999 * 9999  # Operasi matematika berulang untuk menyiksa CPU kontainer
+        
     update_system_metrics()
     try:
         if patient.blood_glucose_level > 140 or patient.HbA1c_level > 6.5:
