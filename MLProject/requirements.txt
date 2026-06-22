@@ -7,3 +7,5 @@ matplotlib
 seaborn
 fastapi
 uvicorn
+prometheus_client
+psutil
