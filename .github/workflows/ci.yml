@@ -30,7 +30,7 @@ jobs:
     - name: Run mlflow project
       run: |
         echo "Menjalankan eksperimen MLflow..."
-        mlflow run MLProject/ --no-conda --experiment-name "Diabetes_Classification_Grizzly"
+        mlflow run MLProject/ --env-manager local --experiment-name "Diabetes_Classification_Grizzly"
 
     - name: Get latest MLflow run_id
       id: get-run-id
