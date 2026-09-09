@@ -44,13 +44,10 @@ jobs:
         echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
         echo "Ditemukan Run ID: $RUN_ID"
 
-    - name: Build Docker Image
+    - name: Build Docker Image with MLflow
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest .
-
-    - name: Install Python dependencies
-      run: |
-        echo "Menginstal dependensi tambahan untuk deployment..."
+        echo "Membangun Docker image menggunakan mlflow build-docker..."
+        mlflow build-docker --model-uri "runs:/${{ env.RUN_ID }}/model" --image-name "${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest" --enable-mlflow
 
     - name: Upload Artifact to GitHub
       uses: actions/upload-artifact@v4
@@ -65,10 +62,6 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Tag Docker Image
-      run: |
-        docker tag ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest
-
-    - name: Push Docker Image
+    - name: Push Docker Image to Docker Hub
       run: |
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest
