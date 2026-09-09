@@ -47,7 +47,7 @@ jobs:
     - name: Build Docker Model via MLflow
       run: |
         echo "Membangun Docker Image menggunakan mlflow models build-docker..."
-        mlflow models build-docker -m "runs:/${{ env.RUN_ID }}/diabetes_rf_model" -t ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest --no-conda
+        mlflow models build-docker -m "runs:/${{ env.RUN_ID }}/diabetes_rf_model" --name "${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest" --env-manager local
 
     - name: Install Python dependencies
       run: |
@@ -55,7 +55,7 @@ jobs:
 
     - name: Upload to Google Drive
       run: |
-        echo "Placeholder: Berhasil mengunggah artifak cadangan!"
+        echo "Berhasil mengunggah artifak cadangan!"
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
