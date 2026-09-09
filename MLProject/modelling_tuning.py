@@ -50,12 +50,16 @@ report_json_path = "classification_report_detail.json"
 with open(report_json_path, "w") as json_file:
     json.dump(report_dict, json_file, indent=4)
 
-# --- STEP 1: LOGGING KE LOCAL MLRUNS (WAJIB PERTAMA) ---
+# --- STEP 1: LOGGING KE LOCAL MLRUNS ---
 print("Simpan ke Local mlruns...")
 local_path = os.path.abspath("./mlruns")
 os.environ["MLFLOW_TRACKING_URI"] = f"file:///{local_path}"
 mlflow.set_tracking_uri(f"file:///{local_path}")
 mlflow.set_experiment("Diabetes_Classification_Grizzly")
+
+# Hapus ID Run bawaan mlflow run agar tidak crash di local
+os.environ.pop("MLFLOW_RUN_ID", None)
+os.environ.pop("MLFLOW_EXPERIMENT_ID", None)
 
 with mlflow.start_run(run_name="Random_Forest_Hyperparameter_Tuning"):
     mlflow.log_params(grid_search.best_params_)
@@ -66,7 +70,6 @@ with mlflow.start_run(run_name="Random_Forest_Hyperparameter_Tuning"):
     mlflow.log_metric("recall", rec)
     mlflow.log_metric("f1_score", f1)
     
-    # Kunci utama: Menyimpan model dengan nama folder 'model'
     mlflow.sklearn.log_model(best_model, "model")
     mlflow.log_artifact(cf_matrix_path)
     mlflow.log_artifact(report_json_path)
@@ -78,6 +81,9 @@ dagshub_uri = mlflow.get_tracking_uri()
 os.environ["MLFLOW_TRACKING_URI"] = dagshub_uri
 mlflow.set_tracking_uri(dagshub_uri)
 mlflow.set_experiment("Diabetes_Classification_Grizzly")
+
+os.environ.pop("MLFLOW_RUN_ID", None)
+os.environ.pop("MLFLOW_EXPERIMENT_ID", None)
 
 with mlflow.start_run(run_name="Random_Forest_Hyperparameter_Tuning"):
     mlflow.log_params(grid_search.best_params_)
