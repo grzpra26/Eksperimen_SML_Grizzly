@@ -28,16 +28,22 @@ jobs:
         pip install mlflow dagshub pandas scikit-learn
 
     - name: Run mlflow project
-      env:
-        DAGSHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       run: |
-        echo "Menjalankan eksperimen MLflow secara otomatis..."
-        # Menjalankan project jika diperlukan di sisi CI
-        # mlflow run MLProject/ --no-conda
+        echo "Menjalankan eksperimen MLflow..."
+        mlflow run MLProject/ --no-conda --experiment-name "Diabetes_Classification_Grizzly"
 
     - name: Get latest MLflow run_id
+      id: get-run-id
       run: |
-        echo "Mendapatkan Run ID terbaru dari tracking server..."
+        # Mengambil run_id terbaru darimlflow tracking lokal
+        RUN_ID=$(python -c "import mlflow; client = mlflow.tracking.MlflowClient(); runs = client.search_runs(client.get_experiment_by_name('Diabetes_Classification_Grizzly').experiment_id, order_by=['start_time DESC'], max_results=1); print(runs[0].info.run_id if runs else '')")
+        echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+        echo "Ditemukan Run ID: $RUN_ID"
+
+    - name: Build Docker Model via MLflow
+      run: |
+        echo "Membangun Docker Image menggunakan mlflow models build-docker..."
+        mlflow models build-docker -m "runs:/${{ env.RUN_ID }}/diabetes_rf_model" -t ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest --no-conda
 
     - name: Install Python dependencies
       run: |
@@ -46,10 +52,6 @@ jobs:
     - name: Upload to Google Drive
       run: |
         echo "Placeholder: Berhasil mengunggah artifak cadangan!"
-
-    - name: Build Docker Model
-      run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest .
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
