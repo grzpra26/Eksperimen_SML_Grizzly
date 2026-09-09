@@ -44,10 +44,9 @@ jobs:
         echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
         echo "Ditemukan Run ID: $RUN_ID"
 
-    - name: Build Docker Model via MLflow
+    - name: Build Docker Image
       run: |
-        echo "Membangun Docker Image menggunakan mlflow models build-docker..."
-        mlflow models build-docker -m "runs:/${{ env.RUN_ID }}/diabetes_rf_model" --name "${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest" --env-manager local
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest .
 
     - name: Install Python dependencies
       run: |
