@@ -47,7 +47,7 @@ jobs:
     - name: Build Docker Image
       run: |
         echo "Membangun Docker image menggunakan mlflow models build-docker..."
-        mlflow models build-docker -m "runs:/${{ env.RUN_ID }}/model" -n "${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest" --enable-mlflow
+        mlflow models build-docker -m "runs:/${{ env.RUN_ID }}/model" -n "${{ secrets.DOCKERHUB_USERNAME }}/diabetes-model:latest" --install-mlflow
 
     - name: Upload Artifact to GitHub
       uses: actions/upload-artifact@v4
