@@ -28,6 +28,10 @@ jobs:
         pip install mlflow dagshub pandas scikit-learn matplotlib seaborn
 
     - name: Run mlflow project
+      env:
+        DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
+        MLFLOW_TRACKING_USERNAME: grzpra26
+        MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_USER_TOKEN }}
       run: |
         echo "Menjalankan eksperimen MLflow..."
         mlflow run MLProject/ --env-manager local --experiment-name "Diabetes_Classification_Grizzly"
