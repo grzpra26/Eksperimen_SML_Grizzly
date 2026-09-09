@@ -52,9 +52,12 @@ jobs:
       run: |
         echo "Menginstal dependensi tambahan untuk deployment..."
 
-    - name: Upload to Google Drive
-      run: |
-        echo "Berhasil mengunggah artifak cadangan!"
+    - name: Upload Artifact to GitHub
+      uses: actions/upload-artifact@v4
+      with:
+        name: mlflow-model-artifact
+        path: |
+          MLProject/
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
